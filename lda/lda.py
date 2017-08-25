@@ -9,7 +9,6 @@ import numpy as np
 
 import lda._lda
 import lda.utils
-import hashlib
 
 logger = logging.getLogger('lda')
 
