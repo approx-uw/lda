@@ -279,7 +279,7 @@ class LDA:
         np.testing.assert_equal(N, len(WS))
         for i in range(N):
             w, d = WS[i], DS[i]
-            z_new = self.ZS_map.get((w,d), hash((w,d)) % n_topics)
+            z_new = self.ZS_map.get((w,d), i % n_topics)
             ZS[i] = z_new
             ndz_[d, z_new] += 1
             nzw_[z_new, w] += 1
