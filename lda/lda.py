@@ -9,6 +9,7 @@ import numpy as np
 
 import lda._lda
 import lda.utils
+import hashlib
 
 logger = logging.getLogger('lda')
 
@@ -96,6 +97,7 @@ class LDA:
         # other than return the current numpy RandomState
         self.random_state = random_state
         self.refresh = refresh
+        self.ZS_map = {}
 
         if alpha <= 0 or eta <= 0:
             raise ValueError("alpha and eta must be greater than zero")
@@ -251,6 +253,7 @@ class LDA:
         self.doc_topic_ /= np.sum(self.doc_topic_, axis=1)[:, np.newaxis]
 
         # delete attributes no longer needed after fitting to save memory and reduce clutter
+        self.ZS_map = {(w,d): t  for w,d,t in zip(self.WS, self.DS, self.ZS)}
         del self.WS
         del self.DS
         del self.ZS
@@ -276,7 +279,7 @@ class LDA:
         np.testing.assert_equal(N, len(WS))
         for i in range(N):
             w, d = WS[i], DS[i]
-            z_new = i % n_topics
+            z_new = self.ZS_map.get((w,d), hash((w,d)) % n_topics)
             ZS[i] = z_new
             ndz_[d, z_new] += 1
             nzw_[z_new, w] += 1
