@@ -87,7 +87,7 @@ class LDA:
     """
 
     def __init__(self, n_topics, n_iter=2000, alpha=0.1, eta=0.01, random_state=None,
-                 refresh=10):
+                 refresh=10, init_ZS_map = None):
         self.n_topics = n_topics
         self.n_iter = n_iter
         self.alpha = alpha
@@ -96,7 +96,7 @@ class LDA:
         # other than return the current numpy RandomState
         self.random_state = random_state
         self.refresh = refresh
-        self.ZS_map = {}
+        self.ZS_map = init_ZS_map if init_ZS_map else {}
 
         if alpha <= 0 or eta <= 0:
             raise ValueError("alpha and eta must be greater than zero")
